@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Syndicat des Copropriétaires</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--blue-dark:#1a3a8f;--blue-mid:#2952c8;--blue-light:#3a6de8;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.2);--white:#fff;--muted:rgba(255,255,255,0.65);--card:rgba(255,255,255,0.13);--input:#fff;--shadow:0 8px 32px rgba(0,0,0,0.25);--r:20px;--rs:14px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#1a3a8f 0%,#2952c8 45%,#3a6de8 100%);min-height:100vh;display:flex;justify-content:center}
+.phone{width:100%;max-width:420px;min-height:100vh;position:relative;overflow:hidden;background:linear-gradient(160deg,#1a3a8f 0%,#2952c8 45%,#3a6de8 100%)}
+.page{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .35s,transform .35s;overflow-y:auto;padding-bottom:100px}
+.page.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.page.out{opacity:0;transform:translateX(-30px)}
+.topbar{display:flex;align-items:center;padding:54px 18px 14px;gap:10px}
+.back-btn{width:36px;height:36px;background:var(--glass);border:1px solid var(--glass-border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:20px;flex-shrink:0;backdrop-filter:blur(10px)}
+.page-title{font-size:18px;font-weight:800;color:#fff;flex:1}
+.act-btn{width:36px;height:36px;background:var(--glass);border:1px solid var(--glass-border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:16px;backdrop-filter:blur(10px);flex-shrink:0}
+.hero{padding:48px 24px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.hero-icon{width:88px;height:88px;background:var(--glass);border:1px solid var(--glass-border);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:44px;backdrop-filter:blur(12px);box-shadow:var(--shadow);margin-bottom:6px}
+.hero h1{font-size:24px;font-weight:900;color:#fff;line-height:1.15}
+.hero .sub{font-size:13px;color:var(--muted);font-weight:500}
+.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--r);padding:20px;margin:0 16px 12px;backdrop-filter:blur(12px)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;color:#fff;margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:14px;padding-left:28px}
+.iw{position:relative;margin-bottom:10px}
+.iw input{width:100%;background:var(--input);border:none;border-radius:var(--rs);padding:15px 44px 15px 16px;font-size:15px;font-family:'Nunito',sans-serif;color:#222;outline:none}
+.iw input::placeholder{color:#bbb}
+.iw .eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:17px;cursor:pointer;color:#888}
+.btn{width:100%;padding:15px;border:none;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(.97);opacity:.9}
+.btn-white{background:#fff;color:#1a3a8f}
+.btn-glass{background:var(--glass);color:#fff;border:1px solid var(--glass-border)}
+.btn-danger{background:rgba(255,80,80,.2);color:#ff9090;border:1px solid rgba(255,80,80,.3)}
+.btn-sm{padding:9px 16px;font-size:13px;width:auto;border-radius:10px}
+.cc{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--r);padding:18px 20px;margin:0 16px 12px;backdrop-filter:blur(12px);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s}
+.cc:active{background:rgba(255,255,255,.22)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(20,50,140,.96);backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);display:flex;padding:10px 0 20px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:700;transition:color .2s}
+.ni.active{color:#fff}
+.ni-icon{font-size:21px}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
+.stat-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--r);padding:16px;backdrop-filter:blur(12px);text-align:center}
+.stat-val{font-size:26px;font-weight:900;color:#fff}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.stat-ico{font-size:20px;margin-bottom:4px}
+.stitle{padding:4px 20px 8px;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.mlist{margin:0 16px;display:flex;flex-direction:column;gap:8px}
+.mi{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--rs);padding:14px 16px;backdrop-filter:blur(12px);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s}
+.mi:active{background:rgba(255,255,255,.22)}
+.mi-ico{font-size:22px;width:32px;text-align:center}
+.mi-info{flex:1}
+.mi-title{font-size:14px;font-weight:700;color:#fff}
+.mi-sub{font-size:12px;color:var(--muted)}
+.mi-arr{color:var(--muted);font-size:16px}
+.badge{background:#ff5050;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:800}
+.list{margin:0 16px;display:flex;flex-direction:column;gap:8px}
+.li{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--rs);padding:13px 15px;backdrop-filter:blur(12px);display:flex;align-items:center;gap:10px}
+.li-ico{font-size:20px;width:28px;text-align:center;flex-shrink:0}
+.li-info{flex:1;min-width:0}
+.li-title{font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.li-right{text-align:right;flex-shrink:0}
+.li-amt{font-size:14px;font-weight:800;color:#fff}
+.pill{border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700;display:inline-block;white-space:nowrap}
+.pg{background:rgba(60,220,120,.2);color:#60ffaa}
+.pr{background:rgba(255,80,80,.2);color:#ff9090}
+.py{background:rgba(255,200,60,.2);color:#ffd060}
+.pb{background:rgba(100,160,255,.2);color:#a0c8ff}
+.pbar{height:7px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin:6px 0 8px}
+.pfill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4a8af8,#60ffaa)}
+.tabs{display:flex;margin:0 16px 14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:11px;padding:3px;backdrop-filter:blur(10px)}
+.tab{flex:1;padding:8px;border-radius:8px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.tab.active{background:#fff;color:#1a3a8f}
+.fl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.fi{width:100%;background:var(--input);border:none;border-radius:var(--rs);padding:13px 14px;font-size:14px;font-family:'Nunito',sans-serif;color:#222;outline:none}
+.fsel{width:100%;background:var(--input);border:none;border-radius:var(--rs);padding:13px 14px;font-size:14px;font-family:'Nunito',sans-serif;color:#222;outline:none;appearance:none}
+.frow{margin-bottom:12px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.divider{height:1px;background:var(--glass-border);margin:12px 0}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.mov.open{opacity:1;pointer-events:all}
+.msh{width:100%;max-width:420px;margin:0 auto;background:linear-gradient(160deg,#1a3a8f,#2952c8);border-radius:24px 24px 0 0;padding:18px 20px 40px;border:1px solid var(--glass-border);transform:translateY(100%);transition:transform .3s ease}
+.mov.open .msh{transform:translateY(0)}
+.mhandle{width:40px;height:4px;background:rgba(255,255,255,.3);border-radius:99px;margin:0 auto 16px}
+.mtitle{font-size:17px;font-weight:900;color:#fff;margin-bottom:14px}
+.avlg{width:74px;height:74px;border-radius:50%;background:var(--glass);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 10px}
+.notif{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--rs);padding:14px 16px;backdrop-filter:blur(12px);display:flex;gap:10px;margin-bottom:8px}
+.ndot{width:7px;height:7px;border-radius:50%;background:#60ffaa;margin-top:4px;flex-shrink:0}
+.ndot.r{background:transparent;border:1px solid var(--muted)}
+.ntitle{font-size:13px;font-weight:700;color:#fff}
+.nbody{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.ntime{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
+.empty .ei{font-size:36px;margin-bottom:8px}
+.alert-box{background:rgba(255,200,60,.15);border:1px solid rgba(255,200,60,.35);border-radius:var(--rs);padding:14px 16px;margin:0 16px 12px}
+.alert-box .at{font-size:13px;font-weight:800;color:#ffd060;margin-bottom:4px}
+.alert-box .ab{font-size:12px;color:rgba(255,220,100,.8);line-height:1.45}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- LOGIN -->
+<div class="page active" id="pg-login">
+  <div class="hero">
+    <div class="hero-icon">🏛️</div>
+    <h1>Syndicat des Copropriétaires</h1>
+    <p class="sub">27 Rue Omar Zayane — Hammamet · 2025/2026</p>
+  </div>
+  <div class="card">
+    <div class="card-title">🔑 Accès Syndic</div>
+    <div class="card-sub">Toutes les fonctionnalités</div>
+    <div class="iw"><input type="password" id="pwd" placeholder="Mot de passe"><span class="eye" onclick="togglePwd()">👁</span></div>
+    <button class="btn btn-white" onclick="goSyndic()">Connexion Syndic →</button>
+  </div>
+  <div class="cc" onclick="goConsult()">
+    <span style="font-size:26px">👁</span>
+    <div style="flex:1"><div style="font-size:15px;font-weight:800;color:#fff">Accès Consultation</div><div style="font-size:12px;color:var(--muted)">Lecture seule · sans mot de passe</div></div>
+    <span style="color:var(--muted);font-size:18px">→</span>
+  </div>
+  <div style="text-align:center;color:var(--muted);font-size:12px;padding:8px">Syndicat des Copropriétaires 2025/2026</div>
+  <div style="text-align:center;padding:4px 0 16px;display:flex;align-items:center;justify-content:center;gap:6px">
+    <span style="font-size:14px">👁</span>
+    <span id="visit-counter" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6)">—</span>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="pg-dash">
+  <div style="padding:50px 18px 8px">
+    <div style="font-size:13px;color:var(--muted);font-weight:600">Bonjour, Syndic 👋</div>
+    <div style="font-size:22px;font-weight:900;color:#fff">Tableau de Bord</div>
+  </div>
+
+  <div class="alert-box">
+    <div class="at">⚠️ Urgences à financer</div>
+    <div class="ab">Changement de la pompe (risque de débordement) + Réfection des peintures extérieures.</div>
+  </div>
+
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px">EXERCICE 1 JUIL 2025 — 30 JUIN 2026</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px">
+        <div><div style="font-size:11px;color:var(--muted)">Recettes</div><div style="font-size:22px;font-weight:900;color:#60ffaa" id="db-rec-val">1 300 DT</div></div>
+        <div style="text-align:right"><div style="font-size:11px;color:var(--muted)">Dépenses</div><div style="font-size:22px;font-weight:900;color:#ff9090" id="db-dep-val">1 145 DT</div></div>
+      </div>
+      <div class="pbar"><div class="pfill" style="width:88%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span>Solde trésorerie</span><span style="color:#60ffaa;font-weight:800" id="db-solde-val">154,81 DT</span></div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val">14</div><div class="stat-lbl">Copropriétaires</div></div>
+    <div class="stat-card"><div class="stat-ico">⚠️</div><div class="stat-val" id="db-impayes">14</div><div class="stat-lbl">Impayés</div></div>
+    <div class="stat-card"><div class="stat-ico">🪙</div><div class="stat-val" id="db-recouvrer">3 120</div><div class="stat-lbl">DT à recouvrer</div></div>
+    <div class="stat-card"><div class="stat-ico">📋</div><div class="stat-val">26</div><div class="stat-lbl">Opérations</div></div>
+  </div>
+
+  <div class="stitle">Gestion</div>
+  <div class="mlist">
+    <div class="mi" onclick="goPage('pg-charges')"><span class="mi-ico">🪙</span><div class="mi-info"><div class="mi-title">Cotisations</div><div class="mi-sub">14 copropriétaires · 150 DT/an</div></div><span class="badge" id="badge-imp">14</span><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-depenses')"><span class="mi-ico">📊</span><div class="mi-info"><div class="mi-title">Dépenses</div><div class="mi-sub">1 145,19 DT · 26 opérations</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-balance')"><span class="mi-ico">⚖️</span><div class="mi-info"><div class="mi-title">Balance</div><div class="mi-sub">Recettes · Dépenses · Solde</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-residents')"><span class="mi-ico">👥</span><div class="mi-info"><div class="mi-title">Résidents</div><div class="mi-sub">Liste des copropriétaires</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-journal')"><span class="mi-ico">📓</span><div class="mi-info"><div class="mi-title">Journal des Opérations</div><div class="mi-sub">Toutes les transactions</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-notifs')"><span class="mi-ico">🔔</span><div class="mi-info"><div class="mi-title">Notifications</div><div class="mi-sub">Annonces aux résidents</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-messages')"><span class="mi-ico">✉️</span><div class="mi-info"><div class="mi-title">Messages résidents</div><div class="mi-sub" id="msg-count-sub">Aucun message</div></div><span id="badge-msg" style="display:none" class="badge">0</span><span class="mi-arr">›</span></div>
+  </div>
+  <div class="nav">
+    <div class="ni active" onclick="navTo('pg-dash',this)"><span class="ni-icon">🏠</span>Accueil</div>
+    <div class="ni" onclick="navTo('pg-charges',this)"><span class="ni-icon">🪙</span>Cotisations</div>
+    <div class="ni" onclick="navTo('pg-depenses',this)"><span class="ni-icon">📊</span>Dépenses</div>
+    <div class="ni" onclick="navTo('pg-residents',this)"><span class="ni-icon">👥</span>Résidents</div>
+    <div class="ni" onclick="navTo('pg-profile',this)"><span class="ni-icon">⚙️</span>Profil</div>
+  </div>
+</div>
+
+<!-- CHARGES -->
+<div class="page" id="pg-charges">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Cotisations</div>
+    <div class="act-btn" onclick="openModal('m-charge')">＋</div>
+  </div>
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:8px">COTISATION 2026 — 150 DT / COPROPRIÉTAIRE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+        <div><div style="font-size:20px;font-weight:900;color:#60ffaa" id="ch-payes">9</div><div style="font-size:11px;color:var(--muted)">Payés</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#ff9090" id="ch-imp">5</div><div style="font-size:11px;color:var(--muted)">Impayés</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#fff" id="ch-tot">14</div><div style="font-size:11px;color:var(--muted)">Total</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted)">Collecté: <span style="color:#60ffaa;font-weight:800" id="db-collecte">0 DT</span> · Restant: <span style="color:#ff9090;font-weight:800" id="db-restant">3 120 DT</span></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="filterCharges('tous',this)">Tous</div>
+    <div class="tab" onclick="filterCharges('paye',this)">Payés</div>
+    <div class="tab" onclick="filterCharges('impaye',this)">Impayés</div>
+  </div>
+  <div class="list" id="list-charges"></div>
+</div>
+
+<!-- DÉPENSES -->
+<div class="page" id="pg-depenses">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Dépenses & Recettes</div>
+    <div class="act-btn" onclick="openModal('m-depense')">＋</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" id="dep-tab-cat" onclick="switchDepTab('cat',this)">Catégories</div>
+    <div class="tab" id="dep-tab-hist" onclick="switchDepTab('hist',this)">Historique</div>
+    <div class="tab" id="dep-tab-rec" onclick="switchDepTab('rec',this)">Recettes</div>
+  </div>
+
+  <!-- ── TAB CATÉGORIES ── -->
+  <div id="dep-section-cat">
+    <div style="margin:0 16px 12px">
+      <div class="card" style="margin:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px">TOTAL DÉPENSES</div>
+        <div style="font-size:26px;font-weight:900;color:#fff" id="dep-total-lbl">1 145,19 DT</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px" id="dep-count-lbl">26 opérations · Exercice 2025/2026</div>
+      </div>
+    </div>
+    <div class="stitle">Par catégorie</div>
+    <div class="list" style="margin:0 16px 14px">
+      <div class="li"><span class="li-ico">🧹</span><div class="li-info"><div class="li-title">Ménage</div><div class="li-sub">Plusieurs intervenants</div></div><div class="li-right"><div class="li-amt">330,00 DT</div><div class="pill py">28,8%</div></div></div>
+      <div class="li"><span class="li-ico">🔧</span><div class="li-info"><div class="li-title">Travaux (Rampe escalier)</div><div class="li-sub">Rénovation structure</div></div><div class="li-right"><div class="li-amt">280,00 DT</div><div class="pill py">24,4%</div></div></div>
+      <div class="li"><span class="li-ico">🚽</span><div class="li-info"><div class="li-title">Fosse Septique</div><div class="li-sub">3 voyages de vidange</div></div><div class="li-right"><div class="li-amt">160,00 DT</div><div class="pill pb">14,0%</div></div></div>
+      <div class="li"><span class="li-ico">🎨</span><div class="li-info"><div class="li-title">Peinture</div><div class="li-sub">3M PRO + autres</div></div><div class="li-right"><div class="li-amt">148,00 DT</div><div class="pill pb">12,9%</div></div></div>
+      <div class="li"><span class="li-ico">📦</span><div class="li-info"><div class="li-title">Divers</div><div class="li-sub">Évacuation déchets, carnet…</div></div><div class="li-right"><div class="li-amt">114,04 DT</div><div class="pill pb">9,9%</div></div></div>
+      <div class="li"><span class="li-ico">⚡</span><div class="li-info"><div class="li-title">Électricité</div><div class="li-sub">Réparations électriques</div></div><div class="li-right"><div class="li-amt">40,00 DT</div><div class="pill pg">3,5%</div></div></div>
+      <div class="li"><span class="li-ico">🌿</span><div class="li-info"><div class="li-title">Jardinage</div><div class="li-sub">Taille, outils 3M PRO</div></div><div class="li-right"><div class="li-amt">35,00 DT</div><div class="pill pg">3,1%</div></div></div>
+      <div class="li"><span class="li-ico">💡</span><div class="li-info"><div class="li-title">STEG</div><div class="li-sub">Factures électricité</div></div><div class="li-right"><div class="li-amt">27,00 DT</div><div class="pill pg">2,4%</div></div></div>
+      <div class="li"><span class="li-ico">🧴</span><div class="li-info"><div class="li-title">Entretien</div><div class="li-sub">Produits nettoyage</div></div><div class="li-right"><div class="li-amt">11,15 DT</div><div class="pill pg">1,0%</div></div></div>
+    </div>
+    <div id="dep-extra-cat-title" style="display:none"><div class="stitle">Dépenses ajoutées</div></div>
+    <div class="list" id="list-depenses-extra"></div>
+  </div>
+
+  <!-- ── TAB HISTORIQUE DÉPENSES ── -->
+  <div id="dep-section-hist" style="display:none">
+    <div style="margin:0 16px 12px">
+      <div class="card" style="margin:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:2px">HISTORIQUE COMPLET</div>
+        <div style="font-size:22px;font-weight:900;color:#ff9090">1 145,19 DT</div>
+        <div style="font-size:12px;color:var(--muted)">38 opérations · Nov 2025 — Mai 2026</div>
+      </div>
+    </div>
+    <div class="stitle">Toutes les sorties</div>
+    <div class="list" style="margin:0 16px" id="dep-hist-list"></div>
+  </div>
+
+  <!-- ── TAB RECETTES ── -->
+  <div id="dep-section-rec" style="display:none">
+    <div style="margin:0 16px 12px">
+      <div class="card" style="margin:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div>
+            <div style="font-size:11px;color:var(--muted);font-weight:700">TOTAL RECETTES</div>
+            <div style="font-size:26px;font-weight:900;color:#60ffaa" id="rec-total-lbl">1 300,00 DT</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--muted);font-weight:700">COTISATIONS</div>
+            <div style="font-size:15px;font-weight:800;color:#fff" id="rec-count-lbl">9 / 14</div>
+          </div>
+        </div>
+        <div class="pbar"><div class="pfill" id="rec-pbar" style="width:62%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+          <span id="rec-encaisse-lbl">Encaissé: 0 DT</span>
+          <span id="rec-restant-lbl">Restant: 3 120 DT</span>
+        </div>
+      </div>
+    </div>
+    <div class="stitle">Cotisations reçues</div>
+    <div class="list" style="margin:0 16px" id="rec-hist-list"></div>
+    <div class="stitle" style="margin-top:10px">Cotisations en attente</div>
+    <div class="list" style="margin:0 16px" id="rec-attente-list"></div>
+  </div>
+
+
+<!-- RÉSIDENTS -->
+<div class="page" id="pg-residents">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Résidents</div>
+    <div class="act-btn" onclick="openModal('m-resident')">＋</div>
+  </div>
+  <div style="margin:0 16px 12px">
+    <input class="fi" id="res-search" placeholder="🔍  Rechercher..." oninput="renderResidents()" style="border-radius:var(--rs)">
+  </div>
+  <div class="stitle">14 Copropriétaires</div>
+  <div class="list" id="list-residents"></div>
+</div>
+
+<!-- RÉSIDENT DÉTAIL -->
+<div class="page" id="pg-res-detail">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Fiche Copropriétaire</div>
+    <div class="act-btn" id="det-save-btn" onclick="saveResidentInline()" style="display:none;background:rgba(96,255,170,.2);border-color:rgba(96,255,170,.4)">✅</div>
+  </div>
+
+  <!-- Avatar + nom + statut -->
+  <div style="padding:12px 20px 16px;text-align:center">
+    <div class="avlg" id="det-avatar" onclick="cycleAvatar()" style="cursor:pointer;font-size:34px" title="Changer l'icône">👤</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Appuyer pour changer l'icône</div>
+    <div id="det-pill" style="margin-bottom:4px"></div>
+  </div>
+
+  <!-- Infos identité -->
+  <div class="card" style="margin:0 16px 12px">
+    <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">👤 Identité</div>
+    <div class="frow">
+      <div class="fl">Nom complet</div>
+      <input class="fi" id="det-nom" placeholder="Nom du copropriétaire" oninput="detChanged()">
+    </div>
+    <div class="fgrid">
+      <div class="frow">
+        <div class="fl">Appartement / Lot</div>
+        <input class="fi" id="det-lot" placeholder="Ex: Apt 2B" oninput="detChanged()">
+      </div>
+      <div class="frow">
+        <div class="fl">Type</div>
+        <select class="fsel" id="det-type" onchange="detChanged()">
+          <option>Propriétaire</option>
+          <option>Locataire</option>
+          <option>Héritier</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coordonnées -->
+  <div class="card" style="margin:0 16px 12px">
+    <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📞 Coordonnées</div>
+    <div class="frow">
+      <div class="fl">Téléphone</div>
+      <input class="fi" id="det-tel" type="tel" oninput="coordChanged()" placeholder="+216 XX XXX XXX" oninput="detChanged()">
+    </div>
+    <div class="frow">
+      <div class="fl">Email</div>
+      <input class="fi" id="det-email" type="email" oninput="coordChanged()" placeholder="email@example.com" oninput="detChanged()">
+    </div>
+    <div class="frow" style="margin-bottom:0">
+      <div class="fl">Adresse secondaire (optionnel)</div>
+      <input class="fi" id="det-adresse" oninput="coordChanged()" placeholder="Adresse hors résidence" oninput="detChanged()">
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="card" style="margin:0 16px 12px">
+    <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📝 Notes</div>
+    <textarea class="fi" id="det-notes" rows="3" placeholder="Remarques, informations particulières…" style="resize:none;height:80px" oninput="detChanged()"></textarea>
+  </div>
+
+  <!-- Cotisations -->
+  <div class="card" id="det-charge-card" style="margin:0 16px 12px"></div>
+
+  <!-- Actions syndic -->
+  <div style="margin:0 16px 10px;display:flex;gap:8px">
+    <button class="btn btn-success" id="det-save-main" onclick="saveResidentInline()" style="flex:2;display:none">💾 Enregistrer</button>
+  </div>
+  <!-- Bouton save coordonnées (mode consultation) -->
+  <div style="margin:0 16px 10px;display:none" id="det-save-coord">
+    <button class="btn btn-white" onclick="saveCoordonnees()" style="gap:8px">📱 Enregistrer mes coordonnées</button>
+  </div>
+  <!-- Versement -->
+  <div class="card" id="det-versement-card" style="margin:0 16px 10px">
+    <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">💳 Enregistrer un versement</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="position:relative;flex:2">
+        <input class="fi" id="det-versement" type="number" placeholder="150" min="1" style="padding-right:44px">
+        <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:#888">DT</span>
+      </div>
+      <button class="btn btn-success" id="det-pay-btn" onclick="marquerVersement()" style="flex:2;padding:13px">✅ Valider versement</button>
+    </div>
+    <div id="det-versement-msg" style="font-size:12px;color:#60ffaa;margin-top:8px;display:none;font-weight:700"></div>
+  </div>
+  <div style="margin:0 16px;display:flex;gap:8px;padding-bottom:10px">
+    <button class="btn btn-danger btn-sm" onclick="deleteResident()" style="flex:1">🗑 Supprimer</button>
+  </div>
+</div>
+
+<!-- JOURNAL -->
+<div class="page" id="pg-journal">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Journal des Opérations</div>
+  </div>
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center">
+        <div><div style="font-size:18px;font-weight:900;color:#60ffaa">1 300,00 DT</div><div style="font-size:11px;color:var(--muted)">Total Crédits</div></div>
+        <div><div style="font-size:18px;font-weight:900;color:#ff9090">1 145,19 DT</div><div style="font-size:11px;color:var(--muted)">Total Débits</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stitle">Toutes les transactions</div>
+  <div class="list" id="list-journal"></div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="page" id="pg-notifs">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Notifications</div>
+    <div class="act-btn" onclick="openModal('m-notif')">＋</div>
+  </div>
+  <div style="margin:0 16px 12px"><button class="btn btn-glass" onclick="openModal('m-notif')">📢 Nouvelle annonce</button></div>
+  <div class="stitle">Annonces</div>
+  <div style="margin:0 16px" id="list-notifs">
+    <div class="notif"><div class="ndot"></div><div><div class="ntitle">⚠️ Urgences : Pompe + Peintures extérieures</div><div class="nbody">Changement de la pompe (risque de débordement) + Réfection des peintures extérieures. Merci de régulariser vos cotisations 2026 ainsi que les arriérés dans les plus brefs délais.</div><div class="ntime">Exercice 2025/2026</div></div></div>
+    <div class="notif"><div class="ndot"></div><div><div class="ntitle">Rappel cotisation 2026 — 150 DT</div><div class="nbody">5 copropriétaires n'ont pas encore réglé leur cotisation 2026. 3 120 DT restent à recouvrer (cotisations 2026 + arriérés 2025).</div><div class="ntime">Syndicat 27 Rue Omar Zayane</div></div></div>
+  </div>
+  <div id="list-notifs-extra"></div>
+</div>
+
+<!-- PROFIL -->
+<div class="page" id="pg-profile">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Profil & Paramètres</div>
+  </div>
+  <div style="padding:10px 20px 18px;text-align:center">
+    <div class="avlg">🏛️</div>
+    <div style="font-size:19px;font-weight:900;color:#fff">Syndicat des Copropriétaires</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:3px">27 Rue Omar Zayane, Hammamet</div>
+  </div>
+  <div class="stitle">Informations</div>
+  <div class="card">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div><div class="fl">Adresse</div><div style="font-size:14px;color:#fff;font-weight:700">27 Rue Omar Zayane, Hammamet</div></div>
+      <div class="divider"></div>
+      <div><div class="fl">Exercice</div><div style="font-size:14px;color:#fff;font-weight:700">1 Juillet 2025 — 30 Juin 2026</div></div>
+      <div class="divider"></div>
+      <div><div class="fl">Cotisation annuelle</div><div style="font-size:14px;color:#fff;font-weight:700">150 DT / copropriétaire</div></div>
+      <div class="divider"></div>
+      <div><div class="fl">Copropriétaires</div><div style="font-size:14px;color:#fff;font-weight:700">14 unités</div></div>
+    </div>
+  </div>
+  <div class="stitle">Paramètres</div>
+  <div class="card">
+    <div class="frow"><div class="fl">Mot de passe syndic</div><input class="fi" id="set-pwd" type="password" placeholder="Nouveau mot de passe"></div>
+    <button class="btn btn-glass" onclick="alert('Mot de passe mis à jour !')">💾 Enregistrer</button>
+  </div>
+  <div class="stitle">Actions</div>
+  <div class="mlist">
+    <div class="mi" onclick="exportData()"><span class="mi-ico">💾</span><div class="mi-info"><div class="mi-title">Exporter les données</div><div class="mi-sub">Télécharger JSON</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="resetVersements()"><span class="mi-ico">💳</span><div class="mi-info"><div class="mi-title" style="color:#ffd060">Réinitialiser les versements</div><div class="mi-sub">Remettre toutes les cotisations à impayé</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-login')"><span class="mi-ico">🚪</span><div class="mi-info"><div class="mi-title" style="color:#ff9090">Se déconnecter</div><div class="mi-sub">Retour à l'accueil</div></div><span class="mi-arr">›</span></div>
+  </div>
+  <div class="nav">
+    <div class="ni" onclick="navTo('pg-dash',this)"><span class="ni-icon">🏠</span>Accueil</div>
+    <div class="ni" onclick="navTo('pg-charges',this)"><span class="ni-icon">🪙</span>Cotisations</div>
+    <div class="ni" onclick="navTo('pg-depenses',this)"><span class="ni-icon">📊</span>Dépenses</div>
+    <div class="ni" onclick="navTo('pg-residents',this)"><span class="ni-icon">👥</span>Résidents</div>
+    <div class="ni active" onclick="navTo('pg-profile',this)"><span class="ni-icon">⚙️</span>Profil</div>
+  </div>
+</div>
+
+<!-- MESSAGES RÉSIDENTS -->
+<div class="page" id="pg-messages">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Messages Résidents</div>
+    <div class="act-btn" onclick="clearReadMessages()" title="Effacer lus">🗑</div>
+  </div>
+  <div class="stitle" id="pg-msg-count">Aucun message</div>
+  <div style="margin:0 16px" id="list-messages">
+    <div class="empty"><div class="ei">✉️</div>Aucun message reçu</div>
+  </div>
+</div>
+
+<!-- BALANCE -->
+<div class="page" id="pg-balance">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">‹</div>
+    <div class="page-title">Balance Recettes / Dépenses</div>
+  </div>
+
+  <!-- Solde principal -->
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0;text-align:center">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:6px">SOLDE DE TRÉSORERIE</div>
+      <div style="font-size:44px;font-weight:900;color:#60ffaa" id="bal-solde">154,81 DT</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px" id="bal-exercice">Exercice 1 Juil 2025 — 30 Juin 2026</div>
+      <div class="pbar" style="margin-top:12px"><div class="pfill" id="bal-pbar" style="width:88%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+        <span>0 DT</span><span id="bal-pct">88%</span><span id="bal-max-lbl">1 300 DT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recettes vs Dépenses -->
+  <div class="stats-row">
+    <div class="stat-card" style="border:1px solid rgba(96,255,170,.3)">
+      <div class="stat-ico">📥</div>
+      <div class="stat-val" style="color:#60ffaa" id="bal-recettes">1 300</div>
+      <div class="stat-lbl">Recettes DT</div>
+    </div>
+    <div class="stat-card" style="border:1px solid rgba(255,144,144,.3)">
+      <div class="stat-ico">📤</div>
+      <div class="stat-val" style="color:#ff9090" id="bal-depenses">1 145</div>
+      <div class="stat-lbl">Dépenses DT</div>
+    </div>
+  </div>
+
+  <!-- Détail recettes -->
+  <div class="stitle">📥 Recettes</div>
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--glass-border)">
+        <div><div style="font-size:13px;font-weight:700;color:#fff">Cotisations encaissées</div><div style="font-size:11px;color:var(--muted)" id="bal-nb-payes">— copropriétaires payés</div></div>
+        <span style="font-size:15px;font-weight:900;color:#60ffaa" id="bal-total-cotis">0 DT</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--glass-border)">
+        <div><div style="font-size:13px;font-weight:700;color:#fff">Cotisations restantes</div><div style="font-size:11px;color:var(--muted)" id="bal-nb-impayes">— copropriétaires impayés</div></div>
+        <span style="font-size:15px;font-weight:900;color:#ff9090" id="bal-total-reste">0 DT</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px">
+        <span style="font-size:13px;font-weight:800;color:#fff">Total attendu</span>
+        <span style="font-size:15px;font-weight:900;color:#fff" id="bal-total-attendu">2 100 DT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détail dépenses par catégorie -->
+  <div class="stitle">📤 Dépenses par catégorie</div>
+  <div style="margin:0 16px 12px">
+    <div class="card" style="margin:0" id="bal-dep-cats">
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🧹 Ménage</span><span style="font-size:13px;font-weight:800;color:#ff9090">330,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🔧 Travaux</span><span style="font-size:13px;font-weight:800;color:#ff9090">280,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🚽 Fosse Septique</span><span style="font-size:13px;font-weight:800;color:#ff9090">160,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🎨 Peinture</span><span style="font-size:13px;font-weight:800;color:#ff9090">148,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">📦 Divers</span><span style="font-size:13px;font-weight:800;color:#ff9090">114,04 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">⚡ Électricité</span><span style="font-size:13px;font-weight:800;color:#ff9090">40,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🌿 Jardinage</span><span style="font-size:13px;font-weight:800;color:#ff9090">35,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">💡 STEG</span><span style="font-size:13px;font-weight:800;color:#ff9090">27,00 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">🧴 Entretien</span><span style="font-size:13px;font-weight:800;color:#ff9090">11,15 DT</span></div>
+      <div style="display:flex;justify-content:space-between;padding-top:10px"><span style="font-size:13px;font-weight:900;color:#fff">TOTAL</span><span style="font-size:15px;font-weight:900;color:#ff9090">1 145,19 DT</span></div>
+    </div>
+  </div>
+
+  <!-- Dépenses ajoutées manuellement -->
+  <div id="bal-extra-dep-section" style="display:none">
+    <div class="stitle">➕ Dépenses ajoutées</div>
+    <div style="margin:0 16px 12px">
+      <div class="card" style="margin:0" id="bal-extra-dep-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONSULTATION -->
+<div class="page" id="pg-consult">
+  <div style="padding:50px 18px 8px">
+    <div style="font-size:13px;color:var(--muted);font-weight:600">Mode consultation 👁</div>
+    <div style="font-size:22px;font-weight:900;color:#fff">Lecture seule</div>
+  </div>
+  <div class="card">
+    <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px">RÉSUMÉ FINANCIER 2025/2026</div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <div><div style="font-size:11px;color:var(--muted)">Recettes</div><div style="font-size:20px;font-weight:900;color:#60ffaa">1 300 DT</div></div>
+      <div style="text-align:right"><div style="font-size:11px;color:var(--muted)">Dépenses</div><div style="font-size:20px;font-weight:900;color:#ff9090">1 145 DT</div></div>
+    </div>
+    <div class="pbar"><div class="pfill" style="width:88%"></div></div>
+    <div style="font-size:12px;color:var(--muted)">Solde: <span style="color:#60ffaa;font-weight:800" id="cv-solde-val">154,81 DT</span></div>
+  </div>
+  <div class="stitle">Accès</div>
+  <div class="mlist">
+    <div class="mi" onclick="goPage('pg-residents')"><span class="mi-ico">👥</span><div class="mi-info"><div class="mi-title">Ma fiche résident</div><div class="mi-sub">Consulter · Saisir mes coordonnées</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-charges')"><span class="mi-ico">🪙</span><div class="mi-info"><div class="mi-title">Cotisations</div><div class="mi-sub">Cotisations 2026</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-depenses')"><span class="mi-ico">📊</span><div class="mi-info"><div class="mi-title">Dépenses</div><div class="mi-sub">1 145,19 DT</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-balance')"><span class="mi-ico">⚖️</span><div class="mi-info"><div class="mi-title">Balance</div><div class="mi-sub">Recettes · Dépenses · Solde</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-journal')"><span class="mi-ico">📓</span><div class="mi-info"><div class="mi-title">Journal</div><div class="mi-sub">26 opérations</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="goPage('pg-notifs')"><span class="mi-ico">🔔</span><div class="mi-info"><div class="mi-title">Annonces</div><div class="mi-sub">Messages du syndic</div></div><span class="mi-arr">›</span></div>
+    <div class="mi" onclick="openModal('m-msg-syndic')"><span class="mi-ico">✉️</span><div class="mi-info"><div class="mi-title">Écrire au syndic</div><div class="mi-sub">Envoyer un message privé</div></div><span class="mi-arr">›</span></div>
+  </div>
+  <div style="margin:14px 16px 0"><button class="btn btn-glass" onclick="goPage('pg-login')">← Retour à l'accueil</button></div>
+</div>
+
+<!-- MODAL CHARGE -->
+<div class="mov" id="m-charge" onclick="cmOut(event,'m-charge')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="m-charge-title">➕ Ajouter un paiement</div>
+    <input type="hidden" id="m-charge-id">
+    <div class="frow"><div class="fl">Copropriétaire</div><select class="fsel" id="mc-res"></select></div>
+    <div class="fgrid">
+      <div class="frow"><div class="fl">Montant (DT)</div><input class="fi" id="mc-amt" type="number" placeholder="150"></div>
+      <div class="frow"><div class="fl">Période</div><input class="fi" id="mc-mois" placeholder="2026"></div>
+    </div>
+    <div class="frow"><div class="fl">Statut</div><select class="fsel" id="mc-stat"><option value="paye">Payé</option><option value="impaye">Impayé</option></select></div>
+    <div class="frow"><div class="fl">Date paiement</div><input class="fi" id="mc-date" type="date"></div>
+    <div class="frow"><div class="fl">Note (arriéré, retard…)</div><input class="fi" id="mc-note" placeholder="Ex: Arriéré 2025 = 570 DT"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-charge')">Annuler</button>
+      <button class="btn btn-white" style="flex:2" onclick="saveCharge()">✅ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DÉPENSE -->
+<div class="mov" id="m-depense" onclick="cmOut(event,'m-depense')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div class="mtitle">➕ Nouvelle dépense</div>
+    <input type="hidden" id="m-dep-id">
+    <div class="frow"><div class="fl">Description</div><input class="fi" id="md-desc" placeholder="Ex: Réparation pompe"></div>
+    <div class="fgrid">
+      <div class="frow"><div class="fl">Montant (DT)</div><input class="fi" id="md-amt" type="number" placeholder="0"></div>
+      <div class="frow"><div class="fl">Date</div><input class="fi" id="md-date" type="date"></div>
+    </div>
+    <div class="frow"><div class="fl">Catégorie</div><select class="fsel" id="md-cat"><option>Maintenance</option><option>Ménage</option><option>Travaux</option><option>Électricité</option><option>Jardinage</option><option>Entretien</option><option>Fournitures</option><option>Autre</option></select></div>
+    <div class="frow"><div class="fl">Tiers / Fournisseur</div><input class="fi" id="md-four" placeholder="Ex: 3M PRO"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-depense')">Annuler</button>
+      <button class="btn btn-white" style="flex:2" onclick="saveDepense()">✅ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RÉSIDENT -->
+<div class="mov" id="m-resident" onclick="cmOut(event,'m-resident')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="m-res-title">👤 Nouveau copropriétaire</div>
+    <input type="hidden" id="m-res-id">
+    <div class="frow"><div class="fl">Nom complet</div><input class="fi" id="mr-nom" placeholder="Ex: Ben Cheikh Ridha"></div>
+    <div class="fgrid">
+      <div class="frow"><div class="fl">Appartement / Lot</div><input class="fi" id="mr-lot" placeholder="Apt 1A"></div>
+      <div class="frow"><div class="fl">Type</div>
+        <select class="fsel" id="mr-type"><option>Propriétaire</option><option>Locataire</option><option>Héritier</option></select>
+      </div>
+    </div>
+    <div class="fgrid">
+      <div class="frow"><div class="fl">Téléphone</div><input class="fi" id="mr-tel" type="tel" placeholder="+216 XX XXX XXX"></div>
+      <div class="frow"><div class="fl">Email</div><input class="fi" id="mr-email" type="email" placeholder="email@..."></div>
+    </div>
+    <div class="frow"><div class="fl">Adresse secondaire</div><input class="fi" id="mr-adresse" placeholder="Optionnel"></div>
+    <div class="frow" style="margin-bottom:4px"><div class="fl">Notes</div><textarea class="fi" id="mr-notes" placeholder="Remarques…" style="resize:none;height:60px"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-resident')">Annuler</button>
+      <button class="btn btn-white" style="flex:2" onclick="saveResident()">✅ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOTIF -->
+<div class="mov" id="m-notif" onclick="cmOut(event,'m-notif')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div class="mtitle">📢 Nouvelle annonce</div>
+    <div class="frow"><div class="fl">Titre</div><input class="fi" id="mn-titre" placeholder="Titre du message"></div>
+    <div class="frow"><div class="fl">Message</div><textarea class="fi" id="mn-body" rows="4" placeholder="Votre message..." style="resize:none;height:90px"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-notif')">Annuler</button>
+      <button class="btn btn-white" style="flex:2" onclick="saveNotif()">📤 Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REÇU -->
+<div class="mov" id="m-recu" onclick="cmOut(event,'m-recu')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:36px">🧾</div>
+      <div style="font-size:17px;font-weight:900;color:#fff">Reçu de versement</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Syndicat des Copropriétaires</div>
+    </div>
+    <!-- Receipt content -->
+    <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:14px" id="recu-content">
+      <div style="border-bottom:1px solid var(--glass-border);padding-bottom:10px;margin-bottom:10px">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Copropriétaire</div>
+        <div style="font-size:15px;font-weight:800;color:#fff" id="recu-nom">—</div>
+        <div style="font-size:12px;color:var(--muted)" id="recu-lot">—</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">Objet</span>
+        <span style="font-size:12px;font-weight:700;color:#fff" id="recu-objet">Cotisation 2026</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">Date</span>
+        <span style="font-size:12px;font-weight:700;color:#fff" id="recu-date">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">Montant versé</span>
+        <span style="font-size:15px;font-weight:900;color:#60ffaa" id="recu-montant">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">Solde restant</span>
+        <span style="font-size:13px;font-weight:800;" id="recu-solde">—</span>
+      </div>
+      <div style="border-top:1px solid var(--glass-border);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--muted)">Statut</span>
+        <span id="recu-statut">—</span>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);text-align:center;margin-bottom:12px" id="recu-ref">Réf: —</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-recu')">Fermer</button>
+      <button class="btn btn-white" style="flex:2" onclick="imprimerRecu()">📤 Partager</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MESSAGE AU SYNDIC -->
+<div class="mov" id="m-msg-syndic" onclick="cmOut(event,'m-msg-syndic')">
+  <div class="msh">
+    <div class="mhandle"></div>
+    <div class="mtitle">✉️ Message au Syndic</div>
+    <div class="frow">
+      <div class="fl">Votre nom</div>
+      <input class="fi" id="msg-nom" placeholder="Ex: Ben Cheikh Ridha">
+    </div>
+    <div class="frow">
+      <div class="fl">Appartement / Lot</div>
+      <input class="fi" id="msg-apt" placeholder="Ex: Apt 2A">
+    </div>
+    <div class="frow">
+      <div class="fl">Objet</div>
+      <select class="fsel" id="msg-objet">
+        <option>Demande d'information</option>
+        <option>Problème technique</option>
+        <option>Contestation de charge</option>
+        <option>Demande de document</option>
+        <option>Signalement</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fl">Message</div>
+      <textarea class="fi" id="msg-body" rows="4" placeholder="Décrivez votre demande..." style="resize:none;height:100px"></textarea>
+    </div>
+    <div id="msg-sent" style="display:none;background:rgba(96,255,170,.15);border:1px solid rgba(96,255,170,.3);border-radius:10px;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#60ffaa;margin-bottom:10px">
+      ✅ Message envoyé au syndic !
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-glass" style="flex:1" onclick="closeModal('m-msg-syndic')">Fermer</button>
+      <button class="btn btn-white" style="flex:2" onclick="envoyerMessage()">📤 Envoyer</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== DONNÉES RÉELLES DU PDF =====
+const RESIDENTS = [
+  {id:'r1', nom:'Kamerji Nasreddine'},
+  {id:'r2', nom:'El Beji Hichem'},
+  {id:'r3', nom:'Othmani Mounira'},
+  {id:'r4', nom:'Mejri Saida'},
+  {id:'r5', nom:'Ben Cheikh Ridha'},
+  {id:'r6', nom:'Bouaskhar Hattab'},
+  {id:'r7', nom:'Dhambri Sléheddine'},
+  {id:'r8', nom:'Adellatif Manssour'},
+  {id:'r9', nom:'Badaoui Noura'},
+  {id:'r10', nom:'Aouini Bachir'},
+  {id:'r11', nom:'Daaj Najwa'},
+  {id:'r12', nom:'Melliti Mohamed'},
+  {id:'r13', nom:'Othmani Hassen'},
+  {id:'r14', nom:'Ben Hamida / Magri'}
+];
+
+const CHARGES = [
+  {id:'c1', res:'Kamerji Nasreddine', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c2', res:'El Beji Hichem', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c3', res:'Othmani Mounira', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c4', res:'Mejri Saida', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c5', res:'Ben Cheikh Ridha', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c6', res:'Bouaskhar Hattab', amt:150, periode:'2026', stat:'impaye', date:'', arriere:570, note:'Cotisation 2026 non payée · Arriéré 2025: 570 DT'},
+  {id:'c7', res:'Dhambri Sléheddine', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c8', res:'Adellatif Manssour', amt:150, periode:'2026', stat:'impaye', date:'', arriere:150, note:'Cotisation 2026 non payée · Arriéré 2025: 150 DT'},
+  {id:'c9', res:'Badaoui Noura', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c10', res:'Aouini Bachir', amt:150, periode:'2026', stat:'impaye', date:'', arriere:150, note:'Cotisation 2026 non payée · Arriéré 2025: 150 DT'},
+  {id:'c11', res:'Daaj Najwa', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'},
+  {id:'c12', res:'Melliti Mohamed', amt:150, periode:'2026', stat:'impaye', date:'', arriere:150, note:'Cotisation 2026 non payée · Arriéré 2025: 150 DT'},
+  {id:'c13', res:'Othmani Hassen', amt:150, periode:'2026', stat:'impaye', date:'', arriere:150, note:'Cotisation 2026 non payée · Arriéré 2025: 150 DT'},
+  {id:'c14', res:'Ben Hamida / Magri', amt:150, periode:'2026', stat:'impaye', date:'', arriere:0, note:'Cotisation 2026 non payée'}
+];
+
+const JOURNAL = [
+  {id:'j1',date:'16/11/2025',lib:'Ménage',tiers:'Mariem',debit:20,credit:0},
+  {id:'j2',date:'19/11/2025',lib:'Cotisation',tiers:'Mr Nasreddine Kamerji',debit:0,credit:120},
+  {id:'j3',date:'19/11/2025',lib:'Cotisation',tiers:'Mr Hicham ElBéji',debit:0,credit:150},
+  {id:'j4',date:'19/11/2025',lib:'Cotisation',tiers:'Mme Mejri Saida',debit:0,credit:150},
+  {id:'j5',date:'19/11/2025',lib:'Cotisation',tiers:'Mme Mounira Othmani',debit:0,credit:150},
+  {id:'j6',date:'19/11/2025',lib:'Cotisation',tiers:'Mr et Mme Ben Hamida',debit:0,credit:150},
+  {id:'j7',date:'19/11/2025',lib:'STEG',tiers:'—',debit:19,credit:0},
+  {id:'j8',date:'19/11/2025',lib:'Outils jardinage - Taille 3M PRO',tiers:'3M PRO',debit:35,credit:0},
+  {id:'j9',date:'19/11/2025',lib:'Location échelle',tiers:'—',debit:20,credit:0},
+  {id:'j10',date:'19/11/2025',lib:'Cotisation',tiers:'Badaoui Noura',debit:0,credit:150},
+  {id:'j11',date:'19/11/2025',lib:'Produits d\'entretien',tiers:'Anouar',debit:5.15,credit:0},
+  {id:'j12',date:'19/11/2025',lib:'Carnet de reçu / stylo',tiers:'—',debit:4.04,credit:0},
+  {id:'j13',date:'21/11/2025',lib:'Réparations Électriques',tiers:'—',debit:15,credit:0},
+  {id:'j14',date:'21/11/2025',lib:'Plastique de protection',tiers:'3M PRO',debit:10,credit:0},
+  {id:'j15',date:'07/12/2025',lib:'Ménage',tiers:'Maryem',debit:20,credit:0},
+  {id:'j16',date:'07/12/2025',lib:'Cotisation (retard -20 DT)',tiers:'Mme Najwa Daaj',debit:0,credit:130},
+  {id:'j17',date:'12/02/2026',lib:'Cotisation',tiers:'Mr Sleh Dhambri',debit:0,credit:150},
+  {id:'j18',date:'19/02/2026',lib:'Cotisation',tiers:'Mr Ben Cheikh Ridha',debit:0,credit:150},
+  {id:'j19',date:'22/02/2026',lib:'Fosse Septique - 3 voyages',tiers:'—',debit:160,credit:0},
+  {id:'j20',date:'05/03/2026',lib:'Ménage',tiers:'Femme de ménage',debit:25,credit:0},
+  {id:'j21',date:'07/03/2026',lib:'Produits d\'entretien',tiers:'Épicerie',debit:6,credit:0},
+  {id:'j22',date:'10/03/2026',lib:'Ménage',tiers:'Femme de ménage',debit:20,credit:0},
+  {id:'j23',date:'16/03/2026',lib:'Ménage - Espèces',tiers:'Femme de ménage',debit:20,credit:0},
+  {id:'j24',date:'17/03/2026',lib:'Réparations Électriques',tiers:'3M PRO',debit:25,credit:0},
+  {id:'j25',date:'27/03/2026',lib:'STEG',tiers:'—',debit:8,credit:0},
+  {id:'j26',date:'01/04/2026',lib:'Ménage',tiers:'Femme de ménage',debit:20,credit:0},
+  {id:'j27',date:'06/04/2026',lib:'Ménage',tiers:'Femme de ménage',debit:20,credit:0},
+  {id:'j28',date:'10/04/2026',lib:'Peinture',tiers:'3M PRO',debit:78,credit:0},
+  {id:'j29',date:'13/04/2026',lib:'Ménage',tiers:'Femme de ménage',debit:20,credit:0},
+  {id:'j30',date:'24/04/2026',lib:'Rampe escalier',tiers:'—',debit:280,credit:0},
+  {id:'j31',date:'28/04/2026',lib:'Évacuation Déchets',tiers:'—',debit:80,credit:0},
+  {id:'j32',date:'30/04/2026',lib:'Ménage',tiers:'Mejda',debit:60,credit:0},
+  {id:'j33',date:'03/05/2026',lib:'Ménage',tiers:'Mejda',debit:20,credit:0},
+  {id:'j34',date:'04/05/2026',lib:'Ménage',tiers:'—',debit:15,credit:0},
+  {id:'j35',date:'10/05/2026',lib:'Peinture',tiers:'—',debit:70,credit:0},
+  {id:'j36',date:'13/05/2026',lib:'Ménage',tiers:'—',debit:40,credit:0},
+  {id:'j37',date:'21/05/2026',lib:'Ménage',tiers:'—',debit:20,credit:0},
+  {id:'j38',date:'23/05/2026',lib:'Ménage',tiers:'—',debit:10,credit:0}
+];
+
+// Extra data (user additions)
+let extraResidents = [];
+let messagesResidents = [];
+let extraCharges = [];
+let extraDepenses = [];
+let extraNotifs = [];
+
+try {
+  const saved = localStorage.getItem('syndic_extra');
+  if(saved){const d=JSON.parse(saved);extraResidents=d.r||[];extraCharges=d.c||[];extraDepenses=d.d||[];extraNotifs=d.n||[];}
+} catch(e){}
+
+function saveExtra(){
+  try{localStorage.setItem('syndic_extra',JSON.stringify({r:extraResidents,c:extraCharges,d:extraDepenses,n:extraNotifs,m:messagesResidents}));}catch(e){}
+}
+
+function allResidents(){
+  const extraIds = new Set(extraResidents.map(r=>r.id));
+  const base = RESIDENTS.filter(r=>!extraIds.has(r.id));
+  return [...base,...extraResidents];
+}
+function allCharges(){
+  // extraCharges override base CHARGES for same res+periode
+  const overrideKeys = new Set(extraCharges.map(c=>c.res+'|'+c.periode));
+  const base = CHARGES.filter(c=>!overrideKeys.has(c.res+'|'+c.periode));
+  return [...base,...extraCharges];
+}
+
+// ===== MODE CONSULTATION =====
+let consultMode = false;
+
+function goConsult(){ consultMode = true; goPage('pg-consult'); }
+
+// ===== NAV =====
+let navHist=[], currentPg='pg-login';
+function goPage(id){
+  if(id===currentPg)return;
+  const curr=document.getElementById(currentPg);
+  const next=document.getElementById(id);
+  if(!next)return;
+  curr.classList.add('out');
+  setTimeout(()=>{curr.classList.remove('active','out');},350);
+  next.classList.add('active');
+  navHist.push(currentPg);
+  currentPg=id;
+  refreshPage(id);
+  setTimeout(applyConsultMode, 50);
+}
+
+function applyConsultMode(){
+  // Boutons ＋ dans topbar
+  document.querySelectorAll('.act-btn').forEach(b => b.style.display = consultMode ? 'none' : 'flex');
+  // Bouton nouvelle annonce
+  const nb = document.querySelector('#pg-notifs .btn-glass');
+  if(nb) nb.style.display = consultMode ? 'none' : 'flex';
+  // Bouton nouvelle dépense
+  const db = document.querySelector('#pg-depenses .btn-glass');
+  if(db) db.style.display = consultMode ? 'none' : 'flex';
+  // Fiche résident
+  if(currentPg === 'pg-res-detail'){
+    // Champs toujours verrouillés
+    ['det-nom','det-lot','det-notes'].forEach(fid=>{
+      const el=document.getElementById(fid);
+      if(el){ el.disabled = consultMode; el.style.opacity = consultMode ? '0.5' : '1'; }
+    });
+    const typeEl = document.getElementById('det-type');
+    if(typeEl){ typeEl.disabled = consultMode; typeEl.style.opacity = consultMode ? '0.5' : '1'; }
+    const avatarEl = document.getElementById('det-avatar');
+    if(avatarEl) avatarEl.style.cursor = consultMode ? 'default' : 'pointer';
+
+    if(consultMode){
+      // Coordonnées: laisser éditables
+      ['det-tel','det-email','det-adresse'].forEach(fid=>{
+        const el=document.getElementById(fid);
+        if(el){ el.disabled = false; el.style.opacity = '1'; }
+      });
+      // Cacher les boutons syndic
+      const sb=document.getElementById('det-save-btn'); if(sb) sb.style.display='none';
+      const sm=document.getElementById('det-save-main'); if(sm) sm.style.display='none';
+      const db2=document.querySelector('#pg-res-detail .btn-danger'); if(db2) db2.style.display='none';
+      const pb=document.getElementById('det-pay-btn'); if(pb) pb.style.display='none';
+      const vc=document.getElementById('det-versement-card'); if(vc) vc.style.display='none';
+      // Afficher bouton save coordonnées
+      const sc=document.getElementById('det-save-coord');
+      if(sc) sc.style.display='flex';
+    } else {
+      // Mode syndic: cacher bouton coordonnées
+      const sc=document.getElementById('det-save-coord');
+      if(sc) sc.style.display='none';
+    }
+    // Badge
+    const pill = document.getElementById('det-pill');
+    if(pill && consultMode && !pill.innerHTML.includes('Coordonnées'))
+      pill.innerHTML += ' <span class="pill pb">📝 Saisie coordonnées</span>';
+  }
+}
+function goSyndic(){ consultMode=false; goPage('pg-dash'); }
+function goBack(){
+  if(!navHist.length)return;
+  const prev=navHist.pop();
+  const curr=document.getElementById(currentPg);
+  const back=document.getElementById(prev);
+  curr.classList.remove('active');
+  curr.style.transform='translateX(30px)';curr.style.opacity='0';
+  setTimeout(()=>{curr.style.transform='';curr.style.opacity='';},350);
+  back.classList.add('active');
+  currentPg=prev;
+}
+function navTo(id,el){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  goPage(id);
+}
+function refreshPage(id){
+  if(id==='pg-charges')renderCharges();
+  if(id==='pg-residents')renderResidents();
+  if(id==='pg-journal')renderJournal();
+  if(id==='pg-depenses'){
+    renderExtraDep();
+    // Reset to first tab
+    const catTab=document.getElementById('dep-tab-cat');
+    if(catTab) switchDepTab('cat',catTab);
+  }
+  if(id==='pg-notifs')renderExtraNotifs();
+  if(id==='pg-messages')renderMessages();
+  if(id==='pg-balance')renderBalance();
+}
+
+// ===== CHARGES =====
+let chargeFilter='tous';
+function filterCharges(f,el){
+  chargeFilter=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderCharges();
+}
+function renderDash(){
+  const charges = allCharges();
+  const pays = charges.filter(c=>c.stat==='paye');
+  const imps = charges.filter(c=>c.stat==='impaye');
+  const totalPay = pays.reduce((s,c)=>s+(c.amt||0),0);
+  const totalImp = imps.reduce((s,c)=>s+(c.amt||0)+(c.arriere||0),0);
+  const imp = imps.length;
+  // Dashboard stats
+  const dbImp = document.getElementById('db-impayes');
+  if(dbImp) dbImp.textContent = imp;
+  const dbRec = document.getElementById('db-recouvrer');
+  if(dbRec) dbRec.textContent = totalImp.toLocaleString('fr-FR');
+  const badgeImp = document.getElementById('badge-imp');
+  if(badgeImp) badgeImp.textContent = imp;
+  const dbCol = document.getElementById('db-collecte');
+  if(dbCol){ dbCol.textContent = totalPay.toLocaleString('fr-FR')+' DT'; dbCol.style.color = totalPay>0?'#60ffaa':'#ff9090'; }
+  const dbRes = document.getElementById('db-restant');
+  if(dbRes) dbRes.textContent = totalImp.toLocaleString('fr-FR')+' DT';
+  // Charges page
+  const chCol = document.getElementById('ch-collecte');
+  if(chCol){ chCol.textContent = totalPay.toLocaleString('fr-FR')+' DT'; chCol.style.color = totalPay>0?'#60ffaa':'#ff9090'; }
+  const chRes = document.getElementById('ch-restant');
+  if(chRes) chRes.textContent = totalImp.toLocaleString('fr-FR')+' DT';
+  // Sync solde everywhere
+  renderBalance();
+}
+
+function renderCharges(){
+  let data=allCharges();
+  const pays=data.filter(c=>c.stat==='paye').length;
+  const imps=data.filter(c=>c.stat!=='paye').length;
+  document.getElementById('ch-payes').textContent=pays;
+  document.getElementById('ch-imp').textContent=imps;
+  document.getElementById('ch-tot').textContent=data.length;
+  renderDash();
+  if(chargeFilter==='paye') data=data.filter(c=>c.stat==='paye');
+  if(chargeFilter==='impaye') data=data.filter(c=>c.stat==='impaye');
+  const list=document.getElementById('list-charges');
+  list.innerHTML=data.map(c=>`
+    <div class="li">
+      <span class="li-ico">👤</span>
+      <div class="li-info">
+        <div class="li-title">${c.res}</div>
+        <div class="li-sub">Cotisation ${c.periode||'2026'}${c.date?' · '+c.date:''}${c.note?' · '+c.note:''}</div>
+      </div>
+      <div class="li-right">
+        <div class="li-amt">${c.amt} DT${c.arriere>0?'<div style="font-size:10px;color:#ff9090">+'+c.arriere+' arriéré</div>':''}</div>
+        <div class="${c.stat==='paye'?'pill pg':c.stat==='partiel'?'pill py':'pill pr'}">${c.stat==='paye'?'Payé ✓':c.stat==='partiel'?'Partiel ⏳':'Impayé'}</div>
+      </div>
+    </div>`).join('');
+}
+function saveCharge(){
+  const id=document.getElementById('m-charge-id').value;
+  const obj={id:id||'ec'+Date.now(),res:document.getElementById('mc-res').value,amt:parseFloat(document.getElementById('mc-amt').value)||150,periode:document.getElementById('mc-mois').value||'2026',stat:document.getElementById('mc-stat').value,date:document.getElementById('mc-date').value,arriere:0,note:document.getElementById('mc-note').value};
+  if(id){const i=extraCharges.findIndex(x=>x.id===id);if(i>=0)extraCharges[i]=obj;}
+  else extraCharges.push(obj);
+  saveExtra();closeModal('m-charge');renderCharges();
+}
+
+// ===== RÉSIDENTS =====
+let currentResId=null;
+const AVATARS=['👤','👨','👩','👴','👵','🧑','👨‍💼','👩‍💼','🏠','⭐'];
+let detAvatarIdx=0;
+
+function renderResidents(){
+  const q=(document.getElementById('res-search')?.value||'').toLowerCase();
+  let data=allResidents().filter(r=>!q||r.nom.toLowerCase().includes(q));
+  const list=document.getElementById('list-residents');
+  list.innerHTML=data.map(r=>{
+    const charges=allCharges().filter(c=>c.res===r.nom);
+    // À jour seulement si au moins une charge existe ET toutes sont payées avec date
+    const paid=charges.filter(c=>c.stat==='paye'&&c.date);
+    const unpaid=charges.filter(c=>c.stat!=='paye');
+    const isAJour=paid.length>0&&unpaid.length===0;
+    const hasImp=!isAJour;
+    const hasArriere=charges.some(c=>c.arriere>0);
+    const av=r.avatar||'👤';
+    return `<div class="li" onclick="showResident('${r.id}')">
+      <span class="li-ico">${av}</span>
+      <div class="li-info">
+        <div class="li-title">${r.nom}</div>
+        <div class="li-sub">${r.lot?r.lot+' · ':''}${hasArriere?'⚠️ Arriéré 2025':r.type||'Copropriétaire'}</div>
+      </div>
+      <div class="${hasImp?'pill pr':'pill pg'}">${hasImp?'Impayé':'À jour'}</div>
+    </div>`;
+  }).join('');
+}
+
+function showResident(id){
+  currentResId=id;
+  const r=allResidents().find(x=>x.id===id);
+  if(!r)return;
+  // avatar
+  detAvatarIdx=AVATARS.indexOf(r.avatar||'👤');
+  if(detAvatarIdx<0)detAvatarIdx=0;
+  document.getElementById('det-avatar').textContent=AVATARS[detAvatarIdx];
+  // form fields
+  document.getElementById('det-nom').value=r.nom||'';
+  document.getElementById('det-lot').value=r.lot||'';
+  document.getElementById('det-type').value=r.type||'Propriétaire';
+  document.getElementById('det-tel').value=r.tel||'';
+  document.getElementById('det-email').value=r.email||'';
+  document.getElementById('det-adresse').value=r.adresse||'';
+  document.getElementById('det-notes').value=r.notes||'';
+  // statut pill
+  const charges=allCharges().filter(c=>c.res===r.nom);
+  const paid=charges.filter(c=>c.stat==='paye'&&c.date);
+  const unpaid=charges.filter(c=>c.stat!=='paye');
+  const isAJour=paid.length>0&&unpaid.length===0;
+  const hasArr=charges.some(c=>c.arriere>0);
+  document.getElementById('det-pill').innerHTML=
+    `<span class="${isAJour?'pill pg':'pill pr'}">${isAJour?'Cotisation à jour':'Impayé'}</span>`+
+    (hasArr?` <span class="pill pr">Arriéré 2025</span>`:'');
+  // cotisations card
+  renderDetCharges(r.nom, charges);
+  // hide save buttons
+  document.getElementById('det-save-btn').style.display='none';
+  document.getElementById('det-save-main').style.display='none';
+  goPage('pg-res-detail');
+}
+
+function renderDetCharges(nom, charges){
+  const card=document.getElementById('det-charge-card');
+  const totalArr=charges.reduce((s,c)=>s+(c.arriere||0),0);
+  if(!charges.length){
+    card.innerHTML='<div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🪙 Cotisations</div><div style="color:var(--muted);font-size:13px;text-align:center;padding:10px 0">Aucune cotisation enregistrée</div>';
+    return;
+  }
+  const DUE = 150;
+  let html = '<div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🪙 Cotisations 2026 — '+DUE+' DT</div>';
+  let grandTotalVerse = 0;
+  charges.forEach(c => {
+    const verse = c.versements || (c.stat==='paye'||c.stat==='partiel' ? c.amt : 0);
+    const solde = Math.max(0, DUE - verse);
+    grandTotalVerse += verse;
+    const pillCls = c.stat==='paye' ? 'pill pg' : c.stat==='partiel' ? 'pill py' : 'pill pr';
+    const pillTxt = c.stat==='paye' ? 'Soldé ✓' : c.stat==='partiel' ? 'Partiel ⏳' : 'Impayé';
+    const arriereHtml = c.arriere>0 ? '<span style="color:#ff9090;font-size:10px"> +'+c.arriere+' arr.</span>' : '';
+    const dateHtml = c.date ? c.date : 'Non réglé';
+    let actionHtml = '';
+    if(c.stat==='paye'||c.stat==='partiel'){
+      let btns = '<div style="display:flex;gap:6px;margin-top:7px">';
+      btns += '<button onclick="afficherRecu(\''+c.id+'\')" style="flex:1;background:rgba(255,220,60,.18);border:1px solid rgba(255,220,60,.35);border-radius:8px;padding:7px 4px;font-size:12px;font-weight:700;color:#ffd060;cursor:pointer">🧾 Reçu</button>';
+      if(!consultMode){
+        btns += '<button onclick="editVersement(\''+c.id+'\')" style="flex:1;background:rgba(100,160,255,.2);border:1px solid rgba(100,160,255,.35);border-radius:8px;padding:7px 4px;font-size:12px;font-weight:700;color:#a0c8ff;cursor:pointer">✏️ Modifier</button>';
+        btns += '<button onclick="annulerVersement(\''+c.id+'\')" style="flex:1;background:rgba(255,80,80,.15);border:1px solid rgba(255,80,80,.3);border-radius:8px;padding:7px 4px;font-size:12px;font-weight:700;color:#ff9090;cursor:pointer">✕ Annuler</button>';
+      }
+      btns += '</div>';
+      actionHtml = btns;
+    }    // Versement row
+    html += '<div style="padding:12px 0;border-bottom:1px solid var(--glass-border)">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+    html += '<div><div style="font-size:13px;font-weight:700;color:#fff">Cotisation '+(c.periode||'2026')+'</div>';
+    html += '<div style="font-size:11px;color:var(--muted)">'+dateHtml+'</div></div>';
+    html += '<span class="'+pillCls+'">'+pillTxt+'</span>';
+    html += '</div>';
+    // Versement breakdown
+    if(c.stat==='paye'||c.stat==='partiel'){
+      html += '<div style="margin-top:8px;background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px">';
+      html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px"><span>Montant dû</span><span style="color:#fff;font-weight:700">'+DUE+' DT'+arriereHtml+'</span></div>';
+      html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px"><span>Versé</span><span style="color:#60ffaa;font-weight:700">− '+verse+' DT</span></div>';
+      html += '<div style="height:1px;background:var(--glass-border);margin:5px 0"></div>';
+      const soldeColor = solde===0 ? '#60ffaa' : '#ffd060';
+      html += '<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:900"><span style="color:#fff">Solde restant</span><span style="color:'+soldeColor+'">'+solde+' DT</span></div>';
+      html += '</div>';
+    } else {
+      html += '<div style="margin-top:6px;background:rgba(255,80,80,.08);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;font-size:12px">';
+      html += '<span style="color:var(--muted)">Solde dû</span><span style="color:#ff9090;font-weight:800">'+DUE+' DT'+arriereHtml+'</span>';
+      html += '</div>';
+    }
+    html += actionHtml + '</div>';
+  });
+
+  // Grand total
+  const grandSolde = Math.max(0, 150 - grandTotalVerse);
+  html += '<div style="margin-top:10px;background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px">';
+  html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px"><span>Total versé</span><span style="color:#60ffaa;font-weight:700">'+grandTotalVerse+' DT</span></div>';
+  if(totalArr>0) html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px"><span>Arriérés 2025</span><span style="color:#ff9090;font-weight:700">'+totalArr+' DT</span></div>';
+  const soldeGlobalColor = grandSolde===0 ? '#60ffaa' : '#ffd060';
+  html += '<div style="display:flex;justify-content:space-between;font-size:14px;font-weight:900"><span style="color:#fff">Solde 2026</span><span style="color:'+soldeGlobalColor+'">'+grandSolde+' DT</span></div>';
+  html += '</div>';
+
+  card.innerHTML = html;
+}
+
+function cycleAvatar(){
+  if(consultMode) return;
+  detAvatarIdx=(detAvatarIdx+1)%AVATARS.length;
+  document.getElementById('det-avatar').textContent=AVATARS[detAvatarIdx];
+  detChanged();
+}
+
+function coordChanged(){
+  if(!consultMode) return;
+  const btn = document.getElementById('det-save-coord');
+  if(btn) btn.style.display='flex';
+}
+
+function detChanged(){
+  if(consultMode) return;
+  document.getElementById('det-save-btn').style.display='flex';
+  document.getElementById('det-save-main').style.display='flex';
+}
+
+function saveResidentInline(){
+  const nom=document.getElementById('det-nom').value.trim();
+  if(!nom){alert('Le nom est requis');return;}
+  const oldNom = allResidents().find(x=>x.id===currentResId)?.nom||'';
+  const obj={
+    id:currentResId,
+    nom,
+    lot:document.getElementById('det-lot').value.trim(),
+    type:document.getElementById('det-type').value,
+    tel:document.getElementById('det-tel').value.trim(),
+    email:document.getElementById('det-email').value.trim(),
+    adresse:document.getElementById('det-adresse').value.trim(),
+    notes:document.getElementById('det-notes').value.trim(),
+    avatar:AVATARS[detAvatarIdx]
+  };
+  // update extraResidents or add if base resident (store override)
+  const inExtra=extraResidents.findIndex(x=>x.id===currentResId);
+  if(inExtra>=0) extraResidents[inExtra]=obj;
+  else extraResidents.push(obj); // override base resident
+  // if name changed, update charges references
+  if(nom!==oldNom){
+    extraCharges.forEach(c=>{if(c.res===oldNom)c.res=nom;});
+  }
+  saveExtra();
+  // update pill and hide save buttons
+  const charges=allCharges().filter(c=>c.res===nom);
+  const hasImp=charges.some(c=>c.stat==='impaye');
+  const hasArr=charges.some(c=>c.arriere>0);
+  document.getElementById('det-pill').innerHTML=
+    `<span class="${hasImp?'pill pr':'pill pg'}">${hasImp?'Impayé':'Charges à jour'}</span>`+
+    (hasArr?` <span class="pill pr">Arriéré 2025</span>`:'');
+  document.getElementById('det-avatar').textContent=AVATARS[detAvatarIdx];
+  document.getElementById('det-save-btn').style.display='none';
+  document.getElementById('det-save-main').style.display='none';
+  // flash confirmation
+  const btn=document.getElementById('det-save-main');
+  btn.textContent='✅ Enregistré !';
+  btn.style.display='flex';
+  setTimeout(()=>{btn.style.display='none';btn.textContent='💾 Enregistrer les modifications';},1500);
+  renderResidents();
+}
+
+function marquerVersement(){
+  if(consultMode) return;
+  const r = allResidents().find(x=>x.id===currentResId);
+  if(!r) return;
+  const input = document.getElementById('det-versement');
+  const montant = parseFloat(input.value);
+  // Saisir 0 = annuler le versement existant
+  if(montant === 0 || (input.value.trim() === '0')){
+    const extraIdx0 = extraCharges.findIndex(c=>c.res===r.nom && c.periode==='2026');
+    if(extraIdx0 >= 0){
+      if(!confirm('Annuler le versement de '+extraCharges[extraIdx0].amt+' DT pour '+r.nom+' ?')) return;
+      extraCharges.splice(extraIdx0, 1);
+      saveExtra();
+      input.value = '';
+      input.dataset.editId = '';
+      const btn2 = document.getElementById('det-pay-btn');
+      if(btn2) btn2.textContent = '✅ Valider versement';
+      const msg0 = document.getElementById('det-versement-msg');
+      if(msg0){ msg0.textContent='✕ Versement annulé'; msg0.style.color='#ff9090'; msg0.style.display='block'; setTimeout(()=>msg0.style.display='none',2500); }
+      showResident(currentResId); renderCharges(); renderDash();
+    } else {
+      input.value='';
+    }
+    return;
+  }
+  if(!montant || montant < 0){ input.focus(); input.style.border='2px solid #ff9090'; setTimeout(()=>input.style.border='',1500); return; }
+  const today = new Date().toLocaleDateString('fr-FR');
+  const base = CHARGES.find(c=>c.res===r.nom && c.periode==='2026');
+  const due = 150;
+  const editId = input.dataset.editId || null;
+  // If editing an existing versement, update it directly
+  if(editId){
+    const idx = extraCharges.findIndex(x=>x.id===editId);
+    if(idx>=0){
+      const stat = montant >= due ? 'paye' : 'partiel';
+      extraCharges[idx].amt = montant;
+      extraCharges[idx].versements = montant;
+      extraCharges[idx].stat = stat;
+      extraCharges[idx].date = today;
+      extraCharges[idx].note = stat==='paye' ? 'Modifié · Payé le '+today : 'Modifié · Versement '+montant+' DT / '+due+' DT · '+today;
+      input.dataset.editId = '';
+      const btn = document.getElementById('det-pay-btn');
+      if(btn) btn.textContent = '✅ Valider versement';
+      saveExtra();
+      const msg = document.getElementById('det-versement-msg');
+      if(msg){ msg.textContent='✅ Versement modifié — '+montant+' DT'; msg.style.color='#60ffaa'; msg.style.display='block'; setTimeout(()=>msg.style.display='none',2500); }
+      input.value='';
+      showResident(currentResId); renderCharges(); renderDash();
+      return;
+    }
+  }
+  const stat = montant >= due ? 'paye' : 'partiel';
+  const note = montant >= due
+    ? 'Payé intégralement le '+today
+    : 'Versement de '+montant+' DT le '+today+' (reste '+(due-montant)+' DT)';
+  const extraIdx = extraCharges.findIndex(c=>c.res===r.nom && c.periode==='2026');
+  if(extraIdx >= 0){
+    // Cumulate versement
+    const prev = extraCharges[extraIdx];
+    const cumul = (prev.versements||0) + montant;
+    const newStat = cumul >= due ? 'paye' : 'partiel';
+    extraCharges[extraIdx] = {
+      ...prev,
+      amt: montant >= due ? montant : prev.amt,
+      stat: newStat,
+      date: today,
+      versements: cumul,
+      note: newStat==='paye'
+        ? 'Soldé le '+today+' (total versé: '+cumul+' DT)'
+        : 'Versement '+cumul+' DT / '+due+' DT · '+today
+    };
+  } else {
+    extraCharges.push({
+      id:'ec_ov_'+r.id,
+      res:r.nom,
+      amt:montant,
+      periode:'2026',
+      stat: stat,
+      date:today,
+      arriere: base ? base.arriere : 0,
+      versements: montant,
+      note: note
+    });
+  }
+  saveExtra();
+  // Show confirmation message
+  const msg = document.getElementById('det-versement-msg');
+  if(msg){
+    const cumul2 = extraCharges.find(c=>c.res===r.nom&&c.periode==='2026'); const cv = cumul2?cumul2.versements:montant; const solde2=Math.max(0,due-cv); msg.textContent = cv >= due ? '✅ Cotisation soldée — '+cv+' DT versés' : '⏳ '+cv+' DT versés — solde restant: '+solde2+' DT'; msg.style.color = cv>=due ? '#60ffaa':'#ffd060';
+    msg.style.color = montant >= due ? '#60ffaa' : '#ffd060';
+    msg.style.display = 'block';
+    setTimeout(()=>{ msg.style.display='none'; },3000);
+  }
+  input.value = '';
+  showResident(currentResId);
+  renderCharges();
+  renderDash();
+}
+
+function editVersement(chargeId){
+  if(consultMode) return;
+  const r = allResidents().find(x=>x.id===currentResId);
+  if(!r) return;
+  // Find the charge in extraCharges
+  const c = extraCharges.find(x=>x.id===chargeId);
+  if(!c){ alert('Versement introuvable'); return; }
+  // Pre-fill the versement input with current amount and focus
+  const input = document.getElementById('det-versement');
+  if(input){
+    input.value = c.amt;
+    input.focus();
+    input.select();
+    // Highlight the versement card
+    const card = document.getElementById('det-versement-card');
+    if(card){
+      card.style.border = '2px solid rgba(100,160,255,.6)';
+      setTimeout(()=>card.style.border='1px solid var(--glass-border)',2000);
+    }
+    // Store which charge is being edited
+    input.dataset.editId = chargeId;
+    // Update button label
+    const btn = document.getElementById('det-pay-btn');
+    if(btn) btn.textContent = '✏️ Mettre à jour';
+  }
+}
+
+function annulerVersement(chargeId){
+  if(consultMode) return;
+  if(!confirm('Annuler ce versement ?')) return;
+  const r = allResidents().find(x=>x.id===currentResId);
+  if(!r) return;
+  // Remove from extraCharges
+  extraCharges = extraCharges.filter(x=>x.id!==chargeId);
+  saveExtra();
+  showResident(currentResId);
+  renderCharges();
+  renderDash();
+}
+
+function saveCoordonnees(){
+  const r = allResidents().find(x=>x.id===currentResId);
+  if(!r) return;
+  const tel = document.getElementById('det-tel').value.trim();
+  const email = document.getElementById('det-email').value.trim();
+  const adresse = document.getElementById('det-adresse').value.trim();
+  // Update only coordonnées fields in extraResidents
+  const idx = extraResidents.findIndex(x=>x.id===r.id);
+  if(idx >= 0){
+    extraResidents[idx].tel = tel;
+    extraResidents[idx].email = email;
+    extraResidents[idx].adresse = adresse;
+  } else {
+    // Clone base resident with coord update
+    extraResidents.push({...r, tel, email, adresse});
+  }
+  saveExtra();
+  // Confirmation visuelle
+  const btn = document.getElementById('det-save-coord').querySelector('button');
+  const orig = btn.textContent;
+  btn.textContent = '✅ Coordonnées enregistrées !';
+  btn.style.background = '#e8fff4';
+  setTimeout(()=>{ btn.textContent = orig; btn.style.background = ''; }, 2500);
+}
+
+function deleteResident(){
+  if(!confirm('Supprimer ce résident ?'))return;
+  extraResidents=extraResidents.filter(x=>x.id!==currentResId);
+  saveExtra();goBack();renderResidents();
+}
+
+function saveResident(){
+  const id=document.getElementById('m-res-id').value;
+  const nom=document.getElementById('mr-nom').value.trim();
+  if(!nom){alert('Nom requis');return;}
+  const obj={
+    id:id||'er'+Date.now(),
+    nom,
+    lot:document.getElementById('mr-lot').value.trim(),
+    type:document.getElementById('mr-type').value,
+    tel:document.getElementById('mr-tel').value.trim(),
+    email:document.getElementById('mr-email').value.trim(),
+    adresse:document.getElementById('mr-adresse').value.trim(),
+    notes:document.getElementById('mr-notes').value.trim(),
+    avatar:'👤'
+  };
+  if(id){const i=extraResidents.findIndex(x=>x.id===id);if(i>=0)extraResidents[i]=obj;}
+  else extraResidents.push(obj);
+  saveExtra();closeModal('m-resident');renderResidents();
+}
+
+function populateResSelect(){
+  const sel=document.getElementById('mc-res');
+  sel.innerHTML=allResidents().map(r=>`<option value="${r.nom}">${r.nom}${r.lot?' ('+r.lot+')':''}</option>`).join('');
+}
+
+// ===== JOURNAL =====
+function renderBalance(){
+  const charges = allCharges();
+  const payes = charges.filter(c=>c.stat==='paye');
+  const impayes = charges.filter(c=>c.stat!=='paye');
+  const totalCotisEncaissees = payes.reduce((s,c)=>s+(c.versements||c.amt||0),0);
+  const totalCotisRestantes = impayes.length * 150;
+  const totalAttendu = charges.length * 150;
+  const totalDep = 1145.19 + extraDepenses.reduce((s,d)=>s+(d.amt||0),0);
+  const solde = totalCotisEncaissees - totalDep;
+  const pct = Math.round((totalDep / Math.max(totalCotisEncaissees,1)) * 100);
+
+  // Solde — mettre à jour partout
+  const soldeStr = solde.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' DT';
+  const soldeColor = solde >= 0 ? '#60ffaa' : '#ff9090';
+  ['bal-solde','db-solde-val','cv-solde-val'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.textContent = soldeStr; el.style.color = soldeColor; }
+  });
+  // Bar
+  const pbarEl = document.getElementById('bal-pbar');
+  if(pbarEl){ pbarEl.style.width = Math.min(100,pct)+'%'; pbarEl.style.background = pct>100?'linear-gradient(90deg,#ff9090,#ff5050)':'linear-gradient(90deg,#4a8af8,#60ffaa)'; }
+  const pctEl = document.getElementById('bal-pct');
+  if(pctEl) pctEl.textContent = pct+'%';
+  // Stats
+  const recEl = document.getElementById('bal-recettes');
+  if(recEl) recEl.textContent = totalCotisEncaissees.toLocaleString('fr-FR');
+  const depEl = document.getElementById('bal-depenses');
+  if(depEl) depEl.textContent = totalDep.toLocaleString('fr-FR', {minimumFractionDigits:2});
+  // Update dashboard card
+  const dbRec = document.getElementById('db-rec-val');
+  if(dbRec) dbRec.textContent = totalCotisEncaissees.toLocaleString('fr-FR')+' DT';
+  const dbDep = document.getElementById('db-dep-val');
+  if(dbDep) dbDep.textContent = totalDep.toLocaleString('fr-FR', {minimumFractionDigits:2})+' DT';
+  // Recettes detail
+  const nbP = document.getElementById('bal-nb-payes');
+  if(nbP) nbP.textContent = payes.length + ' copropriétaire' + (payes.length!==1?'s':'') + ' payé' + (payes.length!==1?'s':'');
+  const totC = document.getElementById('bal-total-cotis');
+  if(totC) totC.textContent = totalCotisEncaissees.toLocaleString('fr-FR') + ' DT';
+  const nbI = document.getElementById('bal-nb-impayes');
+  if(nbI) nbI.textContent = impayes.length + ' copropriétaire' + (impayes.length!==1?'s':'') + ' impayé' + (impayes.length!==1?'s':'');
+  const totR = document.getElementById('bal-total-reste');
+  if(totR) totR.textContent = totalCotisRestantes.toLocaleString('fr-FR') + ' DT';
+  const totA = document.getElementById('bal-total-attendu');
+  if(totA) totA.textContent = totalAttendu.toLocaleString('fr-FR') + ' DT';
+  // Extra depenses
+  const extraSec = document.getElementById('bal-extra-dep-section');
+  const extraList = document.getElementById('bal-extra-dep-list');
+  if(extraDepenses.length && extraSec && extraList){
+    extraSec.style.display = 'block';
+    const icons={Maintenance:'🔧',Ménage:'🧹',Travaux:'🏗️',Électricité:'⚡',Jardinage:'🌿',Entretien:'🧴',Fournitures:'📦',Autre:'📋'};
+    let html = extraDepenses.map(d=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:13px;color:#fff">${icons[d.cat]||'📋'} ${d.desc}</span><span style="font-size:13px;font-weight:800;color:#ff9090">${d.amt} DT</span></div>`).join('');
+    const extraTotal = extraDepenses.reduce((s,d)=>s+(d.amt||0),0);
+    html += `<div style="display:flex;justify-content:space-between;padding-top:10px"><span style="font-size:13px;font-weight:900;color:#fff">Total ajouté</span><span style="font-size:14px;font-weight:900;color:#ff9090">${extraTotal} DT</span></div>`;
+    extraList.innerHTML = html;
+  } else if(extraSec) extraSec.style.display = 'none';
+}
+
+function renderJournal(){
+  const list=document.getElementById('list-journal');
+  list.innerHTML=JOURNAL.map(j=>`
+    <div class="li">
+      <span class="li-ico">${j.credit>0?'💚':'🔴'}</span>
+      <div class="li-info">
+        <div class="li-title">${j.lib}</div>
+        <div class="li-sub">${j.date}${j.tiers&&j.tiers!=='—'?' · '+j.tiers:''}</div>
+      </div>
+      <div class="li-right">
+        <div class="li-amt" style="color:${j.credit>0?'#60ffaa':'#ff9090'}">${j.credit>0?'+'+j.credit:'-'+j.debit} DT</div>
+      </div>
+    </div>`).join('');
+}
+
+// ===== DÉPENSES EXTRA =====
+function renderMessages(){
+  const list = document.getElementById('list-messages');
+  const countEl = document.getElementById('pg-msg-count');
+  const badge = document.getElementById('badge-msg');
+  const sub = document.getElementById('msg-count-sub');
+  const unread = messagesResidents.filter(m=>!m.lu).length;
+  if(badge){ badge.textContent=unread; badge.style.display=unread>0?'inline':'none'; }
+  if(sub) sub.textContent = messagesResidents.length===0 ? 'Aucun message' : messagesResidents.length+' message'+(messagesResidents.length>1?'s':'')+(unread>0?' · '+unread+' non lu'+(unread>1?'s':''):'');
+  if(!list) return;
+  if(!messagesResidents.length){ list.innerHTML='<div class="empty"><div class="ei">✉️</div>Aucun message reçu</div>'; if(countEl) countEl.textContent='Aucun message'; return; }
+  if(countEl) countEl.textContent = messagesResidents.length+' message'+(messagesResidents.length>1?'s':'');
+  list.innerHTML=[...messagesResidents].reverse().map(m=>`
+    <div class="notif" onclick="markRead('${m.id}')" style="cursor:pointer;${m.lu?'opacity:0.7':''}">
+      <div class="ndot${m.lu?' r':''}"></div>
+      <div style="flex:1">
+        <div class="ntitle">${m.nom}${m.apt?' · '+m.apt:''}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${m.objet}</div>
+        <div class="nbody">${m.body}</div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          <span class="ntime">${m.date} à ${m.heure}</span>
+          <span class="${m.lu?'pill pb':'pill pg'}" style="font-size:10px">${m.lu?'Lu':'Nouveau'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function markRead(id){
+  const m = messagesResidents.find(x=>x.id===id);
+  if(m && !m.lu){ m.lu=true; saveExtra(); renderMessages(); }
+}
+
+function clearReadMessages(){
+  if(!messagesResidents.some(m=>m.lu)){ alert('Aucun message lu à supprimer'); return; }
+  if(!confirm('Supprimer les messages lus ?')) return;
+  messagesResidents = messagesResidents.filter(m=>!m.lu);
+  saveExtra(); renderMessages();
+}
+
+function switchDepTab(tab, el){
+  document.querySelectorAll('#pg-depenses .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['cat','hist','rec'].forEach(t=>{
+    const s=document.getElementById('dep-section-'+t);
+    if(s) s.style.display = t===tab?'block':'none';
+  });
+  if(tab==='hist') renderDepHistorique();
+  if(tab==='rec') renderRecettes();
+}
+
+function renderDepHistorique(){
+  const list = document.getElementById('dep-hist-list');
+  if(!list) return;
+  // All debit operations from JOURNAL
+  const debits = JOURNAL.filter(j=>j.debit>0);
+  let html = debits.map(j=>`
+    <div class="li">
+      <span class="li-ico">${depIcon(j.lib)}</span>
+      <div class="li-info">
+        <div class="li-title">${j.lib}</div>
+        <div class="li-sub">${j.date}${j.tiers&&j.tiers!=='—'?' · '+j.tiers:''}</div>
+      </div>
+      <div class="li-right"><div class="li-amt" style="color:#ff9090">−${j.debit} DT</div></div>
+    </div>`).join('');
+  // Extra depenses
+  if(extraDepenses.length){
+    html += extraDepenses.map(d=>`
+      <div class="li">
+        <span class="li-ico">${{Maintenance:'🔧',Ménage:'🧹',Travaux:'🏗️',Électricité:'⚡',Jardinage:'🌿',Entretien:'🧴',Fournitures:'📦',Autre:'📋'}[d.cat]||'📋'}</span>
+        <div class="li-info"><div class="li-title">${d.desc}</div><div class="li-sub">${d.date||''}${d.four?' · '+d.four:''}</div></div>
+        <div class="li-right"><div class="li-amt" style="color:#ff9090">−${d.amt} DT</div></div>
+      </div>`).join('');
+  }
+  list.innerHTML = html || '<div class="empty"><div class="ei">📊</div>Aucune dépense</div>';
+}
+
+function depIcon(lib){
+  const l = lib.toLowerCase();
+  if(l.includes('ménage')||l.includes('menage')) return '🧹';
+  if(l.includes('peinture')) return '🎨';
+  if(l.includes('fosse')) return '🚽';
+  if(l.includes('électr')||l.includes('electr')||l.includes('steg')) return '⚡';
+  if(l.includes('jardin')) return '🌿';
+  if(l.includes('entretien')||l.includes('produit')) return '🧴';
+  if(l.includes('rampe')||l.includes('travaux')||l.includes('répar')) return '🔧';
+  if(l.includes('plastique')||l.includes('échelle')) return '🏗️';
+  if(l.includes('évacuation')||l.includes('déchet')) return '🗑️';
+  return '📋';
+}
+
+function renderRecettes(){
+  const list = document.getElementById('rec-hist-list');
+  const attenteList = document.getElementById('rec-attente-list');
+  if(!list||!attenteList) return;
+  const charges = allCharges();
+  const payes = charges.filter(c=>c.stat==='paye'&&c.date);
+  const impayes = charges.filter(c=>c.stat!=='paye');
+  const totalEnc = payes.reduce((s,c)=>s+(c.versements||c.amt||0),0);
+  const totalAtt = impayes.reduce((s,c)=>s+(c.amt||0)+(c.arriere||0),0);
+  const pct = Math.round(totalEnc/(totalEnc+totalAtt)*100)||0;
+  // Update header
+  const recTotal = document.getElementById('rec-total-lbl');
+  if(recTotal) recTotal.textContent = totalEnc.toLocaleString('fr-FR')+' DT';
+  const recCount = document.getElementById('rec-count-lbl');
+  if(recCount) recCount.textContent = payes.length+' / '+charges.length;
+  const recPbar = document.getElementById('rec-pbar');
+  if(recPbar) recPbar.style.width = pct+'%';
+  const recEnc = document.getElementById('rec-encaisse-lbl');
+  if(recEnc) recEnc.textContent = 'Encaissé: '+totalEnc.toLocaleString('fr-FR')+' DT';
+  const recRest = document.getElementById('rec-restant-lbl');
+  if(recRest) recRest.textContent = 'Restant: '+totalAtt.toLocaleString('fr-FR')+' DT';
+  // Paid list
+  list.innerHTML = payes.length ? payes.map(c=>`
+    <div class="li">
+      <span class="li-ico">✅</span>
+      <div class="li-info"><div class="li-title">${c.res}</div><div class="li-sub">${c.date}${c.note?' · '+c.note:''}</div></div>
+      <div class="li-right"><div class="li-amt" style="color:#60ffaa">+${c.versements||c.amt} DT</div><div class="pill pg">Encaissé</div></div>
+    </div>`).join('')
+    : '<div class="empty"><div class="ei">💸</div>Aucune cotisation encaissée</div>';
+  // Pending list
+  attenteList.innerHTML = impayes.length ? impayes.map(c=>`
+    <div class="li">
+      <span class="li-ico">⏳</span>
+      <div class="li-info"><div class="li-title">${c.res}</div><div class="li-sub">Cotisation ${c.periode}${c.arriere>0?' · Arriéré: '+c.arriere+' DT':''}</div></div>
+      <div class="li-right"><div class="li-amt" style="color:#ffd060">${c.amt} DT</div><div class="pill pr">En attente</div></div>
+    </div>`).join('')
+    : '<div class="empty"><div class="ei">🎉</div>Tous les résidents sont à jour !</div>';
+}
+
+function renderExtraDep(){
+  const list=document.getElementById('list-depenses-extra');
+  const title=document.getElementById('dep-extra-cat-title');
+  if(!extraDepenses.length){if(list)list.innerHTML='';if(title)title.style.display='none';return;}
+  if(title) title.style.display='block';
+  const icons={Maintenance:'🔧',Ménage:'🧹',Travaux:'🏗️',Électricité:'⚡',Jardinage:'🌿',Entretien:'🧴',Fournitures:'📦',Autre:'📋'};
+  list.innerHTML=[...extraDepenses].reverse().map(d=>`
+    <div class="li">
+      <span class="li-ico">${icons[d.cat]||'📋'}</span>
+      <div class="li-info"><div class="li-title">${d.desc||'—'}</div><div class="li-sub">${d.date||''}${d.four?' · '+d.four:''}</div></div>
+      <div class="li-right"><div class="li-amt">${d.amt} DT</div><div class="pill py">${d.cat}</div></div>
+    </div>`).join('');
+}
+function saveDepense(){
+  extraDepenses.push({id:'ed'+Date.now(),desc:document.getElementById('md-desc').value,amt:parseFloat(document.getElementById('md-amt').value)||0,date:document.getElementById('md-date').value,cat:document.getElementById('md-cat').value,four:document.getElementById('md-four').value});
+  saveExtra();closeModal('m-depense');renderExtraDep();
+}
+
+// ===== NOTIFS =====
+function renderExtraNotifs(){
+  const list=document.getElementById('list-notifs-extra');
+  if(!extraNotifs.length){list.innerHTML='';return;}
+  list.innerHTML=`<div class="stitle">Annonces ajoutées</div><div style="margin:0 16px">`+
+  [...extraNotifs].reverse().map(n=>`<div class="notif"><div class="ndot"></div><div><div class="ntitle">${n.titre}</div><div class="nbody">${n.body}</div><div class="ntime">${n.date}</div></div></div>`).join('')+`</div>`;
+}
+function envoyerMessage(){
+  const nom = document.getElementById('msg-nom').value.trim();
+  const apt = document.getElementById('msg-apt').value.trim();
+  const objet = document.getElementById('msg-objet').value;
+  const body = document.getElementById('msg-body').value.trim();
+  if(!nom){ document.getElementById('msg-nom').focus(); return; }
+  if(!body){ document.getElementById('msg-body').focus(); return; }
+  const msg = {
+    id: 'msg_'+Date.now(),
+    nom, apt, objet, body,
+    date: new Date().toLocaleDateString('fr-FR'),
+    heure: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}),
+    lu: false
+  };
+  messagesResidents.push(msg);
+  saveExtra();
+  // Show confirmation
+  document.getElementById('msg-sent').style.display='block';
+  document.getElementById('msg-body').value='';
+  setTimeout(()=>{
+    document.getElementById('msg-sent').style.display='none';
+    closeModal('m-msg-syndic');
+  }, 2500);
+  // Refresh messages in syndic view
+  renderMessages();
+}
+
+function afficherRecu(chargeId){
+  const r = allResidents().find(x=>x.id===currentResId);
+  if(!r) return;
+  const c = allCharges().find(x=>x.id===chargeId);
+  if(!c) return;
+  const DUE = 150;
+  const verse = c.versements || c.amt || 0;
+  const solde = Math.max(0, DUE - verse);
+  const ref = 'SYN-'+chargeId.toUpperCase().slice(-6)+'-'+new Date().getFullYear();
+  document.getElementById('recu-nom').textContent = r.nom;
+  document.getElementById('recu-lot').textContent = r.lot || r.apt || 'Copropriétaire';
+  document.getElementById('recu-objet').textContent = 'Cotisation '+( c.periode||'2026');
+  document.getElementById('recu-date').textContent = c.date || '—';
+  document.getElementById('recu-montant').textContent = verse+' DT';
+  const soldeEl = document.getElementById('recu-solde');
+  soldeEl.textContent = solde+' DT';
+  soldeEl.style.color = solde===0 ? '#60ffaa' : '#ffd060';
+  const statutEl = document.getElementById('recu-statut');
+  if(c.stat==='paye'){
+    statutEl.innerHTML = '<span class="pill pg">Soldé ✓</span>';
+  } else {
+    statutEl.innerHTML = '<span class="pill py">Partiel ⏳</span>';
+  }
+  document.getElementById('recu-ref').textContent = 'Réf: '+ref+' · 27 Rue Omar Zayane, Hammamet';
+  openModal('m-recu');
+}
+
+function imprimerRecu(){
+  const nom = document.getElementById('recu-nom').textContent;
+  const lot = document.getElementById('recu-lot').textContent;
+  const objet = document.getElementById('recu-objet').textContent;
+  const date = document.getElementById('recu-date').textContent;
+  const montant = document.getElementById('recu-montant').textContent;
+  const solde = document.getElementById('recu-solde').textContent;
+  const ref = document.getElementById('recu-ref').textContent;
+  const statut = document.getElementById('recu-statut').textContent;
+  const txt =
+    '🧾 REÇU DE VERSEMENT\n'+
+    '─────────────────────────\n'+
+    'Syndicat des Copropriétaires\n'+
+    '27 Rue Omar Zayane, Hammamet\n'+
+    '─────────────────────────\n'+
+    'Copropriétaire : '+nom+'\n'+
+    'Appartement    : '+lot+'\n'+
+    'Objet          : '+objet+'\n'+
+    'Date           : '+date+'\n'+
+    'Montant versé  : '+montant+'\n'+
+    'Solde restant  : '+solde+'\n'+
+    'Statut         : '+statut+'\n'+
+    '─────────────────────────\n'+
+    ref;
+  if(navigator.share){
+    navigator.share({ title:'Reçu versement', text: txt });
+  } else {
+    navigator.clipboard.writeText(txt).then(()=>alert('Reçu copié dans le presse-papier !'));
+  }
+}
+
+function saveNotif(){
+  extraNotifs.push({id:'en'+Date.now(),titre:document.getElementById('mn-titre').value,body:document.getElementById('mn-body').value,date:new Date().toLocaleDateString('fr-FR')});
+  saveExtra();closeModal('m-notif');renderExtraNotifs();
+}
+
+// ===== MODALS =====
+function openModal(id){
+  if(consultMode && id !== 'm-msg-syndic' && id !== 'm-recu'){ return; }
+  if(id==='m-charge'){
+    document.getElementById('m-charge-id').value='';
+    populateResSelect();
+    document.getElementById('mc-amt').value=150;
+    document.getElementById('mc-mois').value='2026';
+    document.getElementById('mc-stat').value='paye';
+    document.getElementById('mc-date').value='';
+    document.getElementById('mc-note').value='';
+  }
+  if(id==='m-depense'){
+    document.getElementById('m-dep-id').value='';
+    document.getElementById('md-desc').value='';document.getElementById('md-amt').value='';
+    document.getElementById('md-date').value=new Date().toISOString().slice(0,10);
+    document.getElementById('md-four').value='';
+  }
+  if(id==='m-resident'){
+    document.getElementById('m-res-title').textContent='👤 Nouveau copropriétaire';
+    document.getElementById('m-res-id').value='';
+    ['mr-nom','mr-lot','mr-tel','mr-email','mr-adresse','mr-notes'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('mr-type').value='Propriétaire';
+  }
+  if(id==='m-notif'){['mn-titre','mn-body'].forEach(i=>document.getElementById(i).value='');}
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function cmOut(e,id){if(e.target.classList.contains('mov'))closeModal(id);}
+
+// ===== UTILS =====
+function togglePwd(){const i=document.getElementById('pwd');i.type=i.type==='password'?'text':'password';}
+function resetVersements(){
+  if(!confirm('Remettre toutes les cotisations à impayé ?')) return;
+  extraCharges = [];
+  saveExtra();
+  renderCharges();
+  renderResidents();
+  renderDash();
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({residents:allResidents(),charges:allCharges(),journal:JOURNAL,depenses:extraDepenses},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='syndicat_27_omar_zayane.json';a.click();
+}
+
+// Init
+renderCharges();
+renderResidents();
+renderDash();
+renderMessages();
+updateVisitCounter();
+// Compteur de visites
+var _visits = 0;
+try {
+  _visits = parseInt(localStorage.getItem('syndic_visits')||'0') + 1;
+  localStorage.setItem('syndic_visits', _visits);
+} catch(e){}
+function updateVisitCounter(){
+  const vc = document.getElementById('visit-counter');
+  if(vc && _visits > 0) vc.textContent = '👁 ' + _visits + (_visits===1?' visite':' visites');
+}
+</script>
+</body>
+</html>
